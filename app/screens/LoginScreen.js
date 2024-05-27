@@ -19,7 +19,6 @@ const LoginScreen = () => {
 
   const navigation = useNavigation();
 
-
   useEffect(() => {
     const checkLoginStatus = async () => {
       //access token using AsyncStorage
@@ -44,15 +43,14 @@ const LoginScreen = () => {
     password: password,
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     try {
-      axios.post("http://192.168.0.5:8000/login", user).then((response) => {
-        //console.log({ response });
-        const token = response.data.token;
-        //console.log({ token });
-        AsyncStorage.setItem("authToken", token);
-        navigation.navigate("Home");
-      });
+      const response = await axios.post("http://192.168.0.5:8000/login", user);
+      //console.log({response})
+      const token = response.data.token;
+      //console.log({ token });
+      AsyncStorage.setItem("authToken", token);
+      navigation.navigate("Home");
     } catch (error) {
       console.log("Error posting data:", error);
       console.error("Response error: ", error.response.data);
@@ -64,8 +62,6 @@ const LoginScreen = () => {
   };
 
   //console.log({user})
-
-
 
   return (
     <View

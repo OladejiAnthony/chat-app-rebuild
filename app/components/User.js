@@ -1,9 +1,21 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import {
+  Pressable,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+} from "react-native";
+import React, { useContext, useState } from "react";
+import { UserType } from "../../UserContext";
 
-const User = () => {
+const User = ({ item }) => {
+  console.log({ item });
+  const { userId, setUserId } = useContext(UserType);
+  const [requestSent, setRequestSent] = useState(false);
+  const [friendRequests, setFriendRequests] = useState([]);
+  const [userFriends, setUserFriends] = useState([]);
 
-    
   return (
     <Pressable
       style={{ flexDirection: "row", alignItems: "center", marginVertical: 10 }}
@@ -26,51 +38,17 @@ const User = () => {
       </View>
 
       {/*Button Section */}
-      {userFriends.includes(item._id) ? (
-        <Pressable
-          style={{
-            backgroundColor: "#82CD47",
-            padding: 10,
-            width: 105,
-            borderRadius: 6,
-          }}
-        >
-          {/*Friend request accepted */}
-          <Text style={{ textAlign: "center", color: "white" }}>Friends</Text>
-        </Pressable>
-      ) : 
-      requestSent ||
-        friendRequests.some((friend) => friend._id === item._id) 
-        ? (
-        <Pressable
-          style={{
-            backgroundColor: "gray",
-            padding: 10,
-            width: 105,
-            borderRadius: 6,
-          }}
-        >
-          {/*Friend request not yet accepted */}
-          <Text style={{ textAlign: "center", color: "white", fontSize: 13 }}>
-            Request Sent
-          </Text>
-        </Pressable>
-      ) 
-        : (
-        <Pressable
-          onPress={() => sendFriendRequest(userId, item._id)}
-          style={{
-            backgroundColor: "#567189",
-            padding: 10,
-            borderRadius: 6,
-            width: 105,
-          }}
-        >
-          <Text style={{ textAlign: "center", color: "white", fontSize: 13 }}>
-            Add Friend
-          </Text>
-        </Pressable>
-      )}
+      <TouchableOpacity
+        style={{
+          backgroundColor: "#82CD47",
+          padding: 10,
+          width: 105,
+          borderRadius: 6,
+        }}
+      >
+        {/*Friend request accepted */}
+        <Text style={{ textAlign: "center", color: "white" }}>Friends</Text>
+      </TouchableOpacity>
     </Pressable>
   );
 };
