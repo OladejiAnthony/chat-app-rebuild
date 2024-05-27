@@ -70,6 +70,15 @@ const createToken = (userId) => {
   return token;
 };
 
+app.post("/usersToken", (req, res) => {
+  const {token} = req.body;
+
+  const decoded =jwtDecode(token);
+
+  return res.json(decoded);
+})
+
+
 //endpoint for logging in of that particular user
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
@@ -119,15 +128,6 @@ app.get("/users/:userId", (req, res) => {
     });
 });
 
-app.post("/usersToken", (req, res) => {
-  const {token} = req.body;
-
-  const decoded =jwtDecode(token);
-
-  return res.json(decoded);
-})
-
-
 //endpoint to send a request to another user
 app.post("/friend-request", async (req, res) => {
   const { currentUserId, selectedUserId } = req.body;
@@ -152,6 +152,24 @@ app.post("/friend-request", async (req, res) => {
     res.sendStatus(500);
   }
 });
+
+//user's sent friend-requests but not yet accepted
+app.get("/friend-requests/sent/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const user = await User.findById(userId)
+      .populate("sentFriendRequests", "name email image")
+      .lean();
+
+    const sentFriendRequests = user.sentFriendRequests;
+
+    res.json(sentFriendRequests);
+  } catch (error) {
+    console.log("error", error);
+    res.status(500).json({ error: "Internal Server" });
+  }
+});
+
 
 //endpoint to show all the friend-requests of a particular user
 app.get("/friend-request/:userId", async (req, res) => {
@@ -218,6 +236,28 @@ app.get("/accepted-friends/:userId", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+//get friend list of the user
+app.get("/friends/:userId", (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    User.findById(userId)
+      .populate("friends")
+      .then((user) => {
+        if (!user) {
+          return res.status(404).json({ message: "User not found" });
+        }
+
+        const friendIds = user.friends.map((friend) => friend._id);
+
+        res.status(200).json(friendIds);
+      });
+  } catch (error) {
+    console.log("error", error);
+    res.status(500).json({ message: "internal server error" });
   }
 });
 
@@ -326,45 +366,5 @@ app.post("/deleteMessages", async (req, res) => {
     res.status(500).json({ error: "Internal Server" });
   }
 });
-
-//user's sent friend-requests
-app.get("/friend-requests/sent/:userId", async (req, res) => {
-  try {
-    const { userId } = req.params;
-    const user = await User.findById(userId)
-      .populate("sentFriendRequests", "name email image")
-      .lean();
-
-    const sentFriendRequests = user.sentFriendRequests;
-
-    res.json(sentFriendRequests);
-  } catch (error) {
-    console.log("error", error);
-    res.status(500).json({ error: "Internal Server" });
-  }
-});
-
-//get friend list of the user
-app.get("/friends/:userId", (req, res) => {
-  try {
-    const { userId } = req.params;
-
-    User.findById(userId)
-      .populate("friends")
-      .then((user) => {
-        if (!user) {
-          return res.status(404).json({ message: "User not found" });
-        }
-
-        const friendIds = user.friends.map((friend) => friend._id);
-
-        res.status(200).json(friendIds);
-      });
-  } catch (error) {
-    console.log("error", error);
-    res.status(500).json({ message: "internal server error" });
-  }
-});
-
 
 
