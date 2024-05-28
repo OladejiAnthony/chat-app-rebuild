@@ -19,24 +19,24 @@ const LoginScreen = () => {
 
   const navigation = useNavigation();
 
-  useEffect(() => {
-    const checkLoginStatus = async () => {
-      //access token using AsyncStorage
-      try {
-        const token = await AsyncStorage.getItem("authToken");
+  // useEffect(() => {
+  //   const checkLoginStatus = async () => {
+  //     //access token using AsyncStorage
+  //     try {
+  //       const token = await AsyncStorage.getItem("authToken");
 
-        if (token) {
-          //if token is present, jump automatically to the HomsScreen without requiring user to Login again even when user minimize the app
-          navigation.navigate("Home");
-        } else {
-          //token not found, show the Login screen itself so that user can login
-        }
-      } catch (error) {
-        console.log("Error: ", error);
-      }
-    };
-    checkLoginStatus();
-  }, []);
+  //       if (token) {
+  //         //if token is present, jump automatically to the HomsScreen without requiring user to Login again even when user minimize the app
+  //         navigation.navigate("Home");
+  //       } else {
+  //         //token not found, show the Login screen itself so that user can login
+  //       }
+  //     } catch (error) {
+  //       console.log("Error: ", error);
+  //     }
+  //   };
+  //   checkLoginStatus();
+  // }, []);
 
   const user = {
     email: email,

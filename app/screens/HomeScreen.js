@@ -45,11 +45,14 @@ const HomeScreen = () => {
     const fetchUserId = async () => {
       try {
         const token = await AsyncStorage.getItem("authToken");
+        //console.log({token})
         if (token) {
           const response = await axios.post(
             `http://192.168.0.5:8000/usersToken`,
             { token }
           );
+          //console.log({response})
+          //console.log(response.data)
           setUserId(response.data.userId);
         } else {
           Alert.alert("Error", "No auth token found");
@@ -145,3 +148,4 @@ The issue where data doesn't display on the UI until you edit and save the file 
 
 To resolve this issue, you should restructure your useEffect hooks to ensure that fetchUsers only runs when userId is available. This can be achieved by splitting your data fetching logic into two separate useEffect hooks. One useEffect will fetch the userId and store it in state, and another useEffect will fetch the users once the userId is available.
 */
+

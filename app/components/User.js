@@ -37,10 +37,11 @@ const User = ({ item }) => {
         console.error("Error fetching user friends", error);
       }
     };
-    console.log({ userFriends });
+    //console.log({ userFriends });
 
     fetchUserFriends();
   }, []);
+
   //friend request sent but not yet accepted
   useEffect(() => {
     const fetchFriendRequests = async () => {
@@ -61,12 +62,12 @@ const User = ({ item }) => {
         console.log("error", error);
       }
     };
-    console.log({friendRequests})
+    //console.log({ friendRequests });
     fetchFriendRequests();
   }, []);
 
-   //Add Friend Btn (POST)
-   const sendFriendRequest = async (currentUserId, selectedUserId) => {
+  //Add Friend Btn (POST)
+  const sendFriendRequest = async (currentUserId, selectedUserId) => {
     try {
       const response = await fetch("http://192.168.0.5:8000/friend-request", {
         method: "POST",
@@ -84,7 +85,7 @@ const User = ({ item }) => {
     } catch (error) {
       console.log("Error message:", error.message);
     }
-    console.log({requestSent})
+    console.log({ requestSent });
   };
 
   return (
@@ -158,3 +159,4 @@ const User = ({ item }) => {
 export default User;
 
 const styles = StyleSheet.create({});
+
