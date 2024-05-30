@@ -38,6 +38,13 @@ const User = require("./models/user");
 const Message = require("./models/message");
 
 /*User Controller and Routes */
+
+//test route
+app.get("/", (req, res) => {
+  res.send("Home Page")
+})
+
+
 //endpoint for registration of the user
 app.post("/register", (req, res) => {
   const { name, email, password, image } = req.body;
